@@ -88,7 +88,7 @@ async function getSubscriberCount(youtubeID, youtubeApiKey, browser, username, p
             console.log(subCount);
             console.log(username);
 
-            if (subCount >= 1) {
+            if (subCount >= 50000) {
                 sendEmail(browser, username, page);
             }
 
