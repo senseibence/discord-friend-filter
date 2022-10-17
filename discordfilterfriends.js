@@ -1,11 +1,11 @@
 const XMLHttpRequest = require('xhr2');
 const puppeteer = require("puppeteer");
 const { youtubeApiKey } = require('./apikey.json');
-let youtubeID; let subCount = -1; let arrayAcceptedPeople = []; let username;
+let youtubeID; let subCount = -1; let arrayAcceptedPeople = []; let username; let rowIndex = 1;
 
 (async () => {
 
-  const link = 'ws://127.0.0.1:9222/devtools/browser/a3847c6b-6035-4798-a783-52c8f064cfe5';
+  const link = 'ws://127.0.0.1:9222/devtools/browser/43cc4cb8-8472-4c4e-9633-879982a3f028';
   const browser = await puppeteer.connect({
       headless: true,
       defaultViewport: null,
@@ -15,27 +15,12 @@ let youtubeID; let subCount = -1; let arrayAcceptedPeople = []; let username;
   const page = await browser.newPage();
   await page.goto("https://discord.com/channels/@me", { waitUntil: "networkidle2" })
 
-  // sometimes discord logs you out in browser
-  if (await page.$('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > section > div > h3')+"" != "null") {
-    await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > section > div > button.marginTop8-24uXGp.marginCenterHorz-574Oxy.linkButton-2ax8wP.button-f2h6uQ.lookLink-15mFoz.lowSaturationUnderline-Z6CW6z.colorLink-1Md3RZ.sizeMin-DfpWCE.grow-2sR_-F > div');
-    await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > section > div > button.marginTop8-24uXGp.marginCenterHorz-574Oxy.linkButton-2ax8wP.button-f2h6uQ.lookLink-15mFoz.lowSaturationUnderline-Z6CW6z.colorLink-1Md3RZ.sizeMin-DfpWCE.grow-2sR_-F > div');
-
-    await page.waitForTimeout(500);
-    await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > section > div > div.list-3-WAYB > div > div > div.userActions-2T4MMd > button.button-f2h6uQ.lookFilled-yCfaCM.colorPrimary-2AuQVo.sizeMedium-2bFIHr.grow-2sR_-F');
-    await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > section > div > div.list-3-WAYB > div > div > div.userActions-2T4MMd > button.button-f2h6uQ.lookFilled-yCfaCM.colorPrimary-2AuQVo.sizeMedium-2bFIHr.grow-2sR_-F');
-
-    await page.waitForTimeout(2000);
-    await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > div > form > div > div > div.mainLoginContainer-wHmAjP > div.block-3uVSn4.marginTop20-2T8ZJx > button.marginBottom8-emkd0_.button-1cRKG6.button-f2h6uQ.lookFilled-yCfaCM.colorBrand-I6CyqQ.sizeLarge-3mScP9.fullWidth-fJIsjq.grow-2sR_-F');
-    await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div > div > div > form > div > div > div.mainLoginContainer-wHmAjP > div.block-3uVSn4.marginTop20-2T8ZJx > button.marginBottom8-emkd0_.button-1cRKG6.button-f2h6uQ.lookFilled-yCfaCM.colorBrand-I6CyqQ.sizeLarge-3mScP9.fullWidth-fJIsjq.grow-2sR_-F');
-    await page.waitForTimeout(4000);
-  }
-
   await page.waitForTimeout(3000);
-  await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div.layers-OrUESM.layers-1YQhyW > div > div.container-1eFtFS > div > div.content-1SgpWY > div.container-2cd8Mz > section > div.children-3xh0VB > div.tabBar-ra-EuL.topPill-3DJJNV > div:nth-child(3)');
-  await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div.layers-OrUESM.layers-1YQhyW > div > div.container-1eFtFS > div > div.content-1SgpWY > div.container-2cd8Mz > section > div.children-3xh0VB > div.tabBar-ra-EuL.topPill-3DJJNV > div:nth-child(3)');
+  await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div.layers-OrUESM.layers-1YQhyW > div > div.container-1eFtFS > div > div.content-1SgpWY > main > section > div.children-3xh0VB > div.tabBar-ra-EuL.topPill-3DJJNV > div:nth-child(3)');
+  await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div.app-3xd6d0 > div > div.layers-OrUESM.layers-1YQhyW > div > div.container-1eFtFS > div > div.content-1SgpWY > main > section > div.children-3xh0VB > div.tabBar-ra-EuL.topPill-3DJJNV > div:nth-child(3)');
 
-  const numberOfRequests = 3; // set the amount of friend requests you have here
-  let index = 0;
+  const numberOfRequests = 2; // set the amount of friend requests you have here
+  let index = -1;
 
   go();
 
@@ -47,21 +32,20 @@ let youtubeID; let subCount = -1; let arrayAcceptedPeople = []; let username;
             await page.waitForTimeout(10000);
         }
 
-        await page.waitForTimeout(1000);
-
-        await page.waitForXPath('//*[@id="pending-tab"]/div[3]/div[1]/div/div/div[1]/div[2]/div[1]/span[1]');
-        let [getNameXPath] = await page.$x('//*[@id="pending-tab"]/div[3]/div[1]/div/div/div[1]/div[2]/div[1]/span[1]');
+        await page.waitForTimeout(500);
+        await page.waitForXPath('//*[@id="pending-tab"]/div[3]/div[1]/div['+rowIndex+']/div/div[1]/div[2]/div[1]/span[1]');
+        let [getNameXPath] = await page.$x('//*[@id="pending-tab"]/div[3]/div[1]/div['+rowIndex+']/div/div[1]/div[2]/div[1]/span[1]');
         username = await page.evaluate(getNameXPath => getNameXPath.textContent, getNameXPath);
         //console.log("Username: "+username);
         await page.waitForTimeout(500);
 
-        await page.waitForSelector('#pending-tab > div.peopleList-2VBrVI.auto-2K3UW5.scrollerBase-_bVAAt > div:nth-child(1) > div > div');
-        await page.click('#pending-tab > div.peopleList-2VBrVI.auto-2K3UW5.scrollerBase-_bVAAt > div:nth-child(1) > div > div');
+        await page.waitForSelector('#pending-tab > div.peopleList-2VBrVI.auto-2K3UW5.scrollerBase-_bVAAt > div:nth-child(1) > div:nth-child('+rowIndex+') > div');
+        await page.click('#pending-tab > div.peopleList-2VBrVI.auto-2K3UW5.scrollerBase-_bVAAt > div:nth-child(1) > div:nth-child('+rowIndex+') > div');
 
         await page.waitForTimeout(500);
-        let exists = await page.$('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.body-1Ukv50 > div > div.connectedAccounts-2R5M4w.userInfoSection-2u2hir')+"";
+        let connectionsExists = await page.$('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.body-1Ukv50 > div > div.connectedAccounts-2R5M4w.userInfoSection-2u2hir')+"";
 
-        if (exists != "null") {
+        if (connectionsExists != "null") { // if connections exist
             await page.waitForTimeout(500);
             let element = await page.$eval('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.body-1Ukv50 > div > div.connectedAccounts-2R5M4w.userInfoSection-2u2hir', e => e.innerHTML);
             const regex = /href="https:\/\/www.youtube.com.*?"/;
@@ -70,26 +54,48 @@ let youtubeID; let subCount = -1; let arrayAcceptedPeople = []; let username;
             if (found != "null") { // if (we found a youtube link)
                 youtubeID = found.replace(/\"/g, "");
                 youtubeID = youtubeID.slice(37); // need this for API
-
-                getSubscriberCount(youtubeID, youtubeApiKey, page, browser, username, go);
-
+                getSubscriberCount(go, youtubeID, youtubeApiKey, page, username);
             }
 
-            else {
-                removeRequest(page, go);
+            else { 
+                checkUserInfo(go, youtubeID, youtubeApiKey, page, username);
             }
-            
         }
 
         else {
-            removeRequest(page, go);
-        }
+            checkUserInfo(go, youtubeID, youtubeApiKey, page, username)
+        }  
+
     }
   
-
 })(); 
 
-async function removeRequest(page, go) { 
+async function checkUserInfo(go, youtubeID, youtubeApiKey, page, username) {
+
+    let linkExists = await page.$('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.body-1Ukv50 > div > div:nth-child(1) > div.userInfoText-2MFCmH.markup-eYLPri > div > a');
+    if (linkExists != "null") { // links are wrapped in their own class; checking if it exists
+
+        await page.waitForXPath('//*[@id="app-mount"]/div[2]/div/div[3]/div[2]/div/div/div[2]/div/div[1]/div[1]/div/a');
+        let [getLinkXPath] = await page.$x('//*[@id="app-mount"]/div[2]/div/div[3]/div[2]/div/div/div[2]/div/div[1]/div[1]/div/a');
+        link = await page.evaluate(getLinkXPath => getLinkXPath.textContent, getLinkXPath);
+
+        if (link.includes("https://www.youtube.com/channel/")) {
+            youtubeID = link.slice(32);
+            getSubscriberCount(go, youtubeID, youtubeApiKey, page, username);
+        }
+
+        else {
+            removeRequest(go, page);
+        }
+    
+    }
+
+    else {
+        removeRequest(go, page);
+    }
+}
+
+async function removeRequest(go, page) { 
     await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.topSection-13QKHs > header > div.header-S26rhB > div.headerTop-1PNKck > div.relationshipButtons-3ByBpj > div.pendingIncoming-3g05VP > button.actionButton-iarQTd.actionRightButton-1oVkpk.button-f2h6uQ.lookFilled-yCfaCM.colorPrimary-2AuQVo.sizeSmall-wU2dO-.grow-2sR_-F');
     await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.topSection-13QKHs > header > div.header-S26rhB > div.headerTop-1PNKck > div.relationshipButtons-3ByBpj > div.pendingIncoming-3g05VP > button.actionButton-iarQTd.actionRightButton-1oVkpk.button-f2h6uQ.lookFilled-yCfaCM.colorPrimary-2AuQVo.sizeSmall-wU2dO-.grow-2sR_-F');
     await page.keyboard.press('Escape');
@@ -97,17 +103,23 @@ async function removeRequest(page, go) {
     go();
 }
 
-async function acceptRequest(page, go, username) {
+async function acceptRequest(go, page, username) {
     arrayAcceptedPeople.push(username);
 
-    await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.topSection-13QKHs > header > div.header-S26rhB > div.headerTop-1PNKck > div.relationshipButtons-3ByBpj > div.pendingIncoming-3g05VP > button.actionButton-iarQTd.button-f2h6uQ.lookFilled-yCfaCM.colorGreen-3y-Z79.sizeSmall-wU2dO-.grow-2sR_-F > div');
-    await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.topSection-13QKHs > header > div.header-S26rhB > div.headerTop-1PNKck > div.relationshipButtons-3ByBpj > div.pendingIncoming-3g05VP > button.actionButton-iarQTd.button-f2h6uQ.lookFilled-yCfaCM.colorGreen-3y-Z79.sizeSmall-wU2dO-.grow-2sR_-F > div');
+    // code to autoaccept; you would then not increment rowIndex
+
+    //await page.waitForSelector('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.topSection-13QKHs > header > div.header-S26rhB > div.headerTop-1PNKck > div.relationshipButtons-3ByBpj > div.pendingIncoming-3g05VP > button.actionButton-iarQTd.button-f2h6uQ.lookFilled-yCfaCM.colorGreen-3y-Z79.sizeSmall-wU2dO-.grow-2sR_-F > div');
+    //await page.click('#app-mount > div.appDevToolsWrapper-1QxdQf > div > div:nth-child(3) > div.layer-1Ixpg3 > div > div > div.topSection-13QKHs > header > div.header-S26rhB > div.headerTop-1PNKck > div.relationshipButtons-3ByBpj > div.pendingIncoming-3g05VP > button.actionButton-iarQTd.button-f2h6uQ.lookFilled-yCfaCM.colorGreen-3y-Z79.sizeSmall-wU2dO-.grow-2sR_-F > div');
+
     await page.keyboard.press('Escape');
+
+    console.log(username+" has over 50k, will be emailed when I'm done");
+    rowIndex++;
 
     go();
 }
 
-async function getSubscriberCount(youtubeID, youtubeApiKey, page, username, go) {
+async function getSubscriberCount(go, youtubeID, youtubeApiKey, page, username) {
     let text; let json;
 
     var xhr = new XMLHttpRequest();
@@ -121,12 +133,12 @@ async function getSubscriberCount(youtubeID, youtubeApiKey, page, username, go) 
             subCount = json.items[0].statistics.subscriberCount;
             //console.log("Subcount: "+subCount);
 
-            if (subCount >= 50000) { // subscriber minimum
-                acceptRequest(page, go, username);
+            if (subCount >= 1) { // subscriber minimum
+                acceptRequest(go, page, username);
             }
 
             else {
-                removeRequest(page, go);
+                removeRequest(go, page);
             }
             
         }
@@ -148,8 +160,8 @@ async function sendEmail(browser, arrayAcceptedPeople) {
 
     await page2.waitForTimeout(500);
     await page2.type("#\\:qd", "bence.lukacsy@gmail.com");
-    await page2.type("#\\:pv", "List Of All People Bot Accepted");  
-    await page2.type("#\\:r1", arrayAcceptedPeople);
+    await page2.type("#\\:pv", "List of all discord reqs w/ above 50k (bot rejected the rest anyways)");  
+    await page2.type("#\\:r1", arrayAcceptedPeople.join('\n'));
     
     await page2.waitForTimeout(500);
     await page2.waitForSelector("#\\:pl");
